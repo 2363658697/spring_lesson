@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+        
+	<!-- 
+		spring中所有的bean默认都是单例，bean中scope属性的值为singleton
+		 单例（singleton）：容器初始化时（ ApplicationContext context = new ClassPathXmlApplicationContext("cn/et/demo4/spring.xml");）实例化
+		 								单例通过同一个ID获取的对象都是同一个
+		 多例（prototype）：调用getBean()方法时实例化
+	 -->
+    <bean id="a" class="cn.et.demo4.A">
+		<property name="name" value="ssg"></property>
+    </bean>
+      
+<bean id="aa" class="cn.et.demo4.A" scope="singleton">
+		<property name="name" value="ssg"></property>
+    </bean>
+
+
+</beans>	

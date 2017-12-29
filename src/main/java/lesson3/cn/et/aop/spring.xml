@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	">
+
+
+	<context:component-scan base-package="lesson3.*..*.aop"></context:component-scan>
+
+
+	
+	<aop:config>
+	<!-- 配置切点    excution(返回值 包名.类名.方法(参数)) 
+	
+	execution(*  lesson3.*..*.MyHouse.seekHouse(..))
+	
+	第一个*代表：修饰符和返回值类型
+	参数可以用..表示一个或多个参数，它代表任意类型的参数
+	
+	lesson3.*代表:lesson3的下一层
+	包名和类名之间有大于1的路径，可以使用*..*
+	例如：cn..et.top.MyClass.java 可以使用 cn.*..*.MyClass.java -->
+		<aop:pointcut expression="execution(*  lesson3.*..*.MyHouse.seekHouse(..))"   id="myCut"/>
+		
+		<!-- 配置连接点 -->
+		<aop:aspect ref="houseAgent">
+			<!-- 前置通知 切点前调用-->
+			<aop:before method="seekBefore" pointcut-ref="myCut"/>
+			<!-- 后置通知 切点后调用-->
+			<aop:after method="seekAfter" pointcut-ref="myCut"/>
+			<!-- 异常通知 切点中出现异常时调用 -->
+			<aop:after-throwing method="throwException" pointcut-ref="myCut"/>
+		</aop:aspect>
+	
+	</aop:config>
+	
+</beans>	

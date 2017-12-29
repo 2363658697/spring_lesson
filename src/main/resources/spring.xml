@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+        
+	<!-- id:类实例的名字 class：类的路径，包名.类名-->
+    <bean id="a" class="cn.et.demo1.A">
+    <!-- 给类中的属性赋值，name：属性名， value：赋给属性的值 -->
+		<property name="name" value="ssg"></property>
+		<!-- 等同
+		<property name="name" >
+			<value>ssg</value>
+		</property>
+		 -->
+		
+		
+    </bean>
+      
+      <bean id="b" class="cn.et.demo1.B"></bean>
+      
+      
+    <!-- 给类中的类属性赋值 -->
+	<bean id="bb" class="cn.et.demo1.B" >
+		<!-- ref:类对象  value:基本类型的值，数字，字符等 -->
+		<property name="a" ref="a"></property>
+		<!--  等同
+		<property name="a">
+			<ref bean="a"/>
+		</property>
+		-->
+	</bean>
+
+
+</beans>	

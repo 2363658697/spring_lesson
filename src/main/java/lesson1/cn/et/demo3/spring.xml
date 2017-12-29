@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+
+	<bean id="a" class="cn.et.demo3.A">
+		<property name="name" value="ssg"></property>
+	</bean>
+		<bean id="a" class="cn.et.demo3.A">
+		<property name="name" value="ssg"></property>
+	</bean>
+	<!-- 
+	自动转配：autowire
+	1) autowire="byType" 根据类型，自动导入需要的类属性，如果定义的类属性是单个，导入的类属性有>=2个类实例,报错
+														如果定义的类属性是集合，导入的类属性有>=2个类实例没问题
+	2) autowire="byName" 根据类中定义的类属性的名字，如果bean中有>=2的类属性的实例，报错
+	 -->
+	<bean id="b" class="cn.et.demo3.B" autowire="byName"></bean>
+
+
+
+
+
+</beans>	

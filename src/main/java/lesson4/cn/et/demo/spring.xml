@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	">
+
+
+
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+
+	<context:component-scan base-package="lesson4.*..*.demo"></context:component-scan>
+
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<property name="driverClassName" value="${driverClassName}" />
+
+		<property name="url" value="${url}" />
+
+		<property name="username" value="${usernamed}" />
+
+		<property name="password" value="${password}" />
+
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- 定义事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 加入dataSource -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- 定义通知： 事务管理器的id名定义为 transactionManager ， 通知中可以省略 transaction-manager="transactionManager" -->
+	<tx:advice id="myAdvice" transaction-manager="transactionManager">
+		<!-- 定义拦截的方法 ，分别以update,add,delete开头的方法 最后一个*代表 除了上面被拦截以外的所有方法 -->
+		<tx:attributes>
+			<tx:method name="update*" propagation="REQUIRED"  isolation="DEFAULT" timeout="-1" no-rollback-for=""/>
+			<tx:method name="save*"   propagation="NOT_SUPPORTED"/>
+			<tx:method name="delete*" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+<!-- 事务的传播属性：
+propagation="REQUIRED"   默认值， 方法和方法之间父子关系
+
+REQUIRED 没有事务创建一个新事务，有事务使用当前事务
+REQUIRED_NEW 不管父方法是否存在事务，都会新建事务
+SUPPORTS  父方法存在事务 使用当前事务  没有事务 使用jdbc的事务（自动提交）
+NOT_SUPPORTED 不管父方法是否存在事务 都使用jdbc事务
+MANDATORY 必须在事务环境下运行，父方法没有事务抛出异常
+		No existing transaction found for transaction marked with propagation 'mandatory'
+NEVER     父方法有事务抛出异常
+		Existing transaction found for transaction marked with propagation 'never'
+		
+事务的隔离级别：isolation="DEFAULT" 
+DEFAULT  默认值 使用数据库默认的隔离级别
+    READ UNCOMMITED: 读未提交 。可以避免第一类丢失更新。
+    READ COMMITED: 读已提交。可以避免第一类丢失更新和脏读。（Oracle,SQL Server默认）
+    REPEATABLE READ: 可重复读。可以避免第一类丢失更新，脏读，不可重复读，第二类丢失更新。(MySQL默认)
+    SERIALIZABLE: 串行化。可以避免所有的并发问题。   在执行财务数据更新时采用。
+    
+    只读事务属性：read-only="true"
+    超时事务属性 ：timeout="-1" 一般设置为10-30之间  mysql默认10s
+    
+    设置事务回滚属性：spring中处于同一事务发生的操作，出现运行时异常默认回滚，非运行时异常不回滚
+ 	设置非运行时异常回滚：
+    	no-rollback-for="包名.类名" 一般是java.lang.Exception
+    设置运行时异常不回滚：
+    	rollback-for="包名.类名" 
+
+ -->
+
+
+
+	<aop:config>
+		<aop:pointcut expression="execution(*  lesson4.*..*.demo.*.*(..))"
+			id="cut" />
+		<aop:advisor advice-ref="myAdvice" pointcut-ref="cut" />
+	</aop:config>
+
+</beans>	

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	">
+
+
+	<!-- 读取property文件,username是个关键字，默认是操作用户Administrator
+	
+	1. bean来读取配置文件：配置文件中没定义username默认读取Administrator，定义了username后读取本地配置的信息
+	 
+	<bean id=""  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties"></property>
+	</bean>
+	
+	2.context 命名空间 读取配置文件   username默认读取Administrator
+	-->
+	<context:property-placeholder  location="classpath:jdbc.properties"/>
+
+
+	<context:component-scan base-package="lesson2/ct/et/demo1"></context:component-scan>
+
+<!-- 	  <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+ 
+    <property name="driverClassName"  value="${driverClassName}" />
+ 
+     <property name="url" value="${url}" />
+ 
+     <property name="username" value="${usernamed}" />
+ 
+     <property name="password" value="${password}" />
+ 
+    </bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+			<property name="dataSource" ref="dataSource"></property>
+	</bean> -->
+	
+</beans>	
